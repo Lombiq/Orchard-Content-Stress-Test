@@ -56,10 +56,11 @@ namespace Lombiq.OrchardContentStressTest.Migrations
                     .WithPart("LayoutPart")
                     .WithPart("CommonPart", builder => builder
                         .WithSetting("DateEditorSettings.ShowDateEditor", "True"))
-                    .WithPart("AutoroutePart", builder => builder
-                    .WithSetting("AutorouteSettings.AllowCustomPattern", "True")
-                    .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "False")
-                    .WithSetting("AutorouteSettings.PatternDefinitions", "[{\"Name\":\"Title\",\"Pattern\":\"{Content.Slug}\",\"Description\":\"my-test\"}]"))
+                    // Attached AutoroutePart insanely slows creation.
+                    //.WithPart("AutoroutePart", builder => builder
+                    //    .WithSetting("AutorouteSettings.AllowCustomPattern", "True")
+                    //    .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "False")
+                    //    .WithSetting("AutorouteSettings.PatternDefinitions", "[{\"Name\":\"Title\",\"Pattern\":\"{Content.Slug}\",\"Description\":\"my-test\"}]"))
                     .WithPart("LocalizationPart")
                     .WithPart("PublishLaterPart")
                     .Creatable()

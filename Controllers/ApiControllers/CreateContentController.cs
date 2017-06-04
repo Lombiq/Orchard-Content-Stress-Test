@@ -49,19 +49,23 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             if (!_authorizer.Authorize(StandardPermissions.SiteOwner))
                 return Content(HttpStatusCode.Unauthorized, T("You're not allowed to create test content.").Text);
 
-            if (viewModel == null)
+            var remainingCount = viewModel.Count - viewModel.CurrentCount;
+            if (viewModel == null ||
+                !Config.SupportedTypes.Contains(viewModel.Type) ||
+                viewModel.Count < 1 ||
+                viewModel.CurrentCount > viewModel.Count ||
+                remainingCount < 0)
             {
                 return Content(HttpStatusCode.BadRequest, T("Bad request.").Text);
             }
 
-            var remainingCount = viewModel.Count - viewModel.CurrentCount;
             for (int i = 0; i < (remainingCount < Config.BatchCount ? remainingCount : Config.BatchCount); i++)
             {
                 var contentItem = _contentManager.New(viewModel.Type);
+                _contentManager.Create(contentItem);
                 switch (viewModel.Type)
                 {
                     case "Test":
-                        _contentManager.Create(contentItem);
                         SetTitlePart(contentItem);
                         SetLayoutPart(contentItem);
                         SetBooleanField(contentItem, nameof(TestPart), FieldNames.TestBooleanField);
@@ -84,8 +88,6 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                     default:
                         return Content(HttpStatusCode.BadRequest, T("Unsupported content type.").Text);
                 }
-
-                _contentManager.Create(contentItem);
             }
 
             return Content(HttpStatusCode.OK, T("The batch were successfully created.").Text);

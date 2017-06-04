@@ -12,8 +12,10 @@
 }
 
 <select id="@typeInputId">
-    <option value="Test">@T("Test")</option>
-    <option value="Page">@T("Page")</option>
+    @foreach (var type in Config.SupportedTypes)
+    {
+        <option value="@type">@type</option>
+    }
 </select>
 
 <input id="@countInputId" />
