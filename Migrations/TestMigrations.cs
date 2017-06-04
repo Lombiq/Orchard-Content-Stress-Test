@@ -1,38 +1,51 @@
 ﻿using Lombiq.OrchardContentStressTest.Constants;
 using Lombiq.OrchardContentStressTest.Models;
+using Orchard.ContentManagement;
 using Orchard.ContentManagement.MetaData;
 using Orchard.Core.Contents.Extensions;
 using Orchard.Data.Migration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Orchard.MediaLibrary.Services;
+using System.IO;
 using System.Web;
 
 namespace Lombiq.OrchardContentStressTest.Migrations
 {
     public class TestMigrations : DataMigrationImpl
     {
+        private readonly IMediaLibraryService _mediaLibraryService;
+        private readonly IContentManager _contentManager;
+        private readonly HttpContextBase _httpContextBase;
+
+
+        public TestMigrations(IMediaLibraryService mediaLibraryService, IContentManager contentManager, HttpContextBase httpContextBase)
+        {
+            _mediaLibraryService = mediaLibraryService;
+            _contentManager = contentManager;
+            _httpContextBase = httpContextBase;
+        }
+
+
         public int Create()
         {
             ContentDefinitionManager.AlterPartDefinition(nameof(TestPart),
                 part => part
-                    .WithField("Test Boolean Field", cfg => cfg
+                    .WithField(FieldNames.TestBooleanField, field => field
                         .OfType("BooleanField"))
-                    .WithField("Test Content Picker Field", cfg => cfg
+                    .WithField(FieldNames.TestContentPickerField, field => field
                         .OfType("ContentPickerField"))
-                    .WithField("Test Date Time Field", cfg => cfg
+                    .WithField(FieldNames.TestDateTimeField, field => field
                         .OfType("DateTimeField"))
-                    .WithField("Test Enumeration Field", cfg => cfg
+                    .WithField(FieldNames.TestEnumerationField, field => field
                         .OfType("EnumerationField"))
-                    .WithField("Test Input Field", cfg => cfg
+                    .WithField(FieldNames.TestInputField, field => field
                         .OfType("InputField"))
-                    .WithField("Test Link Field", cfg => cfg
+                    .WithField(FieldNames.TestLinkField, field => field
                         .OfType("LinkField"))
-                    .WithField("Test Media Library Picker Field", cfg => cfg
+                    .WithField(FieldNames.TestMediaLibraryPickerField, field => field
                         .OfType("MediaLibraryPickerField"))
-                    .WithField("Test Numeric Field", cfg => cfg
+                    .WithField(FieldNames.TestNumericField, field => field
                         .OfType("NumericField"))
-                    .WithField("Test Text Field", cfg => cfg
+                    .WithField(FieldNames.TestTextField, field => field
                         .OfType("TextField"))
                 );
 
@@ -53,6 +66,15 @@ namespace Lombiq.OrchardContentStressTest.Migrations
                     .Draftable()
                     .Listable()
                 );
+
+            var testImagesDirectoryPath = _httpContextBase.Server.MapPath(Path.Combine("~/Modules", "Lombiq.OrchardContentStressTest", "Content", "Images"));
+            foreach (var file in new DirectoryInfo(testImagesDirectoryPath).GetFiles())
+            {
+                using (FileStream stream = new FileInfo(file.FullName).OpenRead())
+                {
+                    _contentManager.Create(_mediaLibraryService.ImportMedia(stream, "Test Images", file.Name));
+                }
+            }
 
             return 1;
         }

@@ -16,6 +16,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers
         public AdminController(IAuthorizer authorizer)
         {
             _authorizer = authorizer;
+
             T = NullLocalizer.Instance;
         }
 
@@ -24,7 +25,6 @@ namespace Lombiq.OrchardContentStressTest.Controllers
         {
             if (!_authorizer.Authorize(StandardPermissions.SiteOwner, T("You're not allowed to create test content.")))
                 return new HttpUnauthorizedResult();
-
 
             return View();
         }
