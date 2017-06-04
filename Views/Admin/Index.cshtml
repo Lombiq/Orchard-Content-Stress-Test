@@ -1,0 +1,80 @@
+﻿@using Lombiq.OrchardContentStressTest.Constants
+
+@{
+    Script.Require("jQuery");
+
+    const string createButtonId = "create-content-button";
+    const string typeInputId = "create-content-type";
+    const string countInputId = "create-content-count";
+    const string messageElementId = "create-content-message";
+
+    var createContentUrl = Url.RouteUrl("CreateContent", new { httproute = "", controller = "CreateContent", Area = "Lombiq.OrchardContentStressTest" });
+}
+
+<select id="@typeInputId">
+    <option value="Page">@T("Page")</option>
+</select>
+
+<input id="@countInputId" />
+
+<button id="@createButtonId">@T("Create")</button>
+
+<div id="@messageElementId"></div>
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                var type, count, currentCount;
+                var $createButton = $("#@createButtonId");
+                var $messageElement = $("#@messageElementId");
+
+                $createButton.on("click", function (e) {
+                    type = $("#@typeInputId").val();
+                    count = $("#@countInputId").val();
+                    currentCount = 0;
+                    $createButton.attr("disabled", "disabled");
+
+                    CreateNextBatch(type, count, currentCount);
+                });
+
+                function CreateNextBatch(type, count, currentCount) {
+                    if (type && count) {
+                        if(currentCount == 0){
+                            $messageElement.html("@T("Creating content items...")");
+                        }
+                        $.ajax({
+                            type: "POST",
+                            url: "@createContentUrl",
+                            data: {
+                                Type: type,
+                                Count: count,
+                                CurrentCount: currentCount
+                            },
+                            success: function (data) {
+                                currentCount += @Config.BatchCount;
+                                $messageElement.html("@T("Created content item count:") " + currentCount);
+                                if (currentCount >= count) {
+                                    $createButton.removeAttr("disabled");
+                                    $messageElement.html("@T("All content items were successfully created:") " + count);
+                                }
+                                else {
+                                    CreateNextBatch(type, count, currentCount);
+                                }
+                            },
+                            error: function (error) {
+                                $messageElement.html(error.responseText);
+                                $createButton.removeAttr("disabled");
+                            }
+                        });
+                    }
+                    else{
+                        $messageElement.html("@T("Fill out all inputs first.")");
+                        $createButton.removeAttr("disabled");
+                    }
+                }
+            });
+        })(jQuery);
+    </script>
+}
