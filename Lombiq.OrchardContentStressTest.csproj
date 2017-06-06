@@ -135,6 +135,10 @@
       <Project>{5D0F00F0-26C9-4785-AD61-B85710C60EB0}</Project>
       <Name>Orchard.Tags</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orchard.Users\Orchard.Users.csproj">
+      <Project>{79AED36E-ABD0-4747-93D3-8722B042454B}</Project>
+      <Name>Orchard.Users</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Piedone.HelpfulLibraries\Piedone.HelpfulLibraries.csproj">
       <Project>{ea61ad10-39d6-41a9-b12b-227f50c54158}</Project>
       <Name>Piedone.HelpfulLibraries</Name>

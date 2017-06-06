@@ -26,6 +26,8 @@ using Lombiq.OrchardContentStressTest.Services;
 using Orchard.Comments.Models;
 using System.IO;
 using Orchard.MediaLibrary.Services;
+using Orchard.Users.Models;
+using Orchard.Services;
 
 namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 {
@@ -38,6 +40,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
         private readonly Faker _faker;
         private readonly ITestContentService _testContentService;
         private readonly IMediaLibraryService _mediaLibraryService;
+        private readonly IMembershipService _membershipService;
 
         public Localizer T { get; set; }
 
@@ -48,7 +51,8 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             ILayoutSerializer layoutSerializer,
             IElementManager elementManager,
             ITestContentService testContentService,
-            IMediaLibraryService mediaLibraryService)
+            IMediaLibraryService mediaLibraryService,
+            IMembershipService membershipService)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;
@@ -57,6 +61,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             _faker = new Faker();
             _testContentService = testContentService;
             _mediaLibraryService = mediaLibraryService;
+            _membershipService = membershipService;
         }
 
 
@@ -126,6 +131,16 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                             {
                                 _contentManager.Create(_mediaLibraryService.ImportMedia(stream, Config.TestImagesFolderName, file.Name));
                             }
+
+                            break;
+                        case "User":
+                            _membershipService.CreateUser(new CreateUserParams(
+                                                  _faker.Internet.UserName(),
+                                                  "password",
+                                                  _faker.Internet.Password(),
+                                                  null,
+                                                  null,
+                                                  true));
 
                             break;
                         default:
