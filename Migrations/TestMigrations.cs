@@ -5,7 +5,9 @@ using Orchard.ContentManagement.MetaData;
 using Orchard.Core.Contents.Extensions;
 using Orchard.Data.Migration;
 using Orchard.MediaLibrary.Services;
+using System;
 using System.IO;
+using System.Text;
 using System.Web;
 
 namespace Lombiq.OrchardContentStressTest.Migrations
@@ -27,6 +29,12 @@ namespace Lombiq.OrchardContentStressTest.Migrations
 
         public int Create()
         {
+            var enumerationFieldOptions = new StringBuilder();
+            for (int i = 0; i < Config.TestEnumerationFieldOptionsNumber; i++)
+            {
+                enumerationFieldOptions.Append("Option" + i + (i == Config.TestEnumerationFieldOptionsNumber - 1 ? "" : Environment.NewLine));
+            }
+
             ContentDefinitionManager.AlterPartDefinition(nameof(TestPart),
                 part => part
                     .WithField(FieldNames.TestBooleanField, field => field
@@ -36,7 +44,8 @@ namespace Lombiq.OrchardContentStressTest.Migrations
                     .WithField(FieldNames.TestDateTimeField, field => field
                         .OfType("DateTimeField"))
                     .WithField(FieldNames.TestEnumerationField, field => field
-                        .OfType("EnumerationField"))
+                        .OfType("EnumerationField")
+                        .WithSetting("EnumerationFieldSettings.Options", enumerationFieldOptions.ToString()))
                     .WithField(FieldNames.TestInputField, field => field
                         .OfType("InputField"))
                     .WithField(FieldNames.TestLinkField, field => field

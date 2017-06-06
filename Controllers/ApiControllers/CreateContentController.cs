@@ -20,6 +20,7 @@ using System.Web.Http;
 using System.Linq;
 using System;
 using Orchard.Exceptions;
+using Orchard.Fields.Settings;
 
 namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 {
@@ -141,7 +142,9 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 
         private void SetEnumerationField(Orchard.ContentManagement.ContentItem contentItem, string partName, string fieldName)
         {
-            contentItem.AsField<EnumerationField>(partName, fieldName).Value = _faker.Lorem.Word();
+            var field = contentItem.AsField<EnumerationField>(partName, fieldName);
+            var settings = field.PartFieldDefinition.Settings.GetModel<EnumerationFieldSettings>();
+            field.SelectedValues = new string[] { settings.Options.Split(new string[] { Environment.NewLine }, StringSplitOptions.None)[_faker.Random.Number(0, Config.TestEnumerationFieldOptionsNumber - 1)] };
         }
 
         private void SetInputField(Orchard.ContentManagement.ContentItem contentItem, string partName, string fieldName)

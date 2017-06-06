@@ -8,6 +8,7 @@ namespace Lombiq.OrchardContentStressTest.Constants
     public class Config
     {
         public const int BatchCount = 50;
+        public const int TestEnumerationFieldOptionsNumber = 10;
         public static string[] SupportedTypes = new string[] { "Test", "Page" };
     }
 }
