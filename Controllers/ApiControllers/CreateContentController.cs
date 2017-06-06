@@ -18,6 +18,8 @@ using Piedone.HelpfulLibraries.Contents;
 using System.Net;
 using System.Web.Http;
 using System.Linq;
+using System;
+using Orchard.Exceptions;
 
 namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 {
@@ -61,32 +63,41 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 
             for (int i = 0; i < (remainingCount < Config.BatchCount ? remainingCount : Config.BatchCount); i++)
             {
-                var contentItem = _contentManager.New(viewModel.Type);
-                _contentManager.Create(contentItem);
-                switch (viewModel.Type)
+                try
                 {
-                    case "Test":
-                        SetTitlePart(contentItem);
-                        SetLayoutPart(contentItem);
-                        SetBooleanField(contentItem, nameof(TestPart), FieldNames.TestBooleanField);
-                        SetContentPickerField(contentItem, nameof(TestPart), FieldNames.TestContentPickerField);
-                        SetDateTimeField(contentItem, nameof(TestPart), FieldNames.TestDateTimeField);
-                        SetEnumerationField(contentItem, nameof(TestPart), FieldNames.TestEnumerationField);
-                        SetInputField(contentItem, nameof(TestPart), FieldNames.TestInputField);
-                        SetLinkField(contentItem, nameof(TestPart), FieldNames.TestLinkField);
-                        SetMediaLibraryPickerField(contentItem, nameof(TestPart), FieldNames.TestMediaLibraryPickerField);
-                        SetNumericField(contentItem, nameof(TestPart), FieldNames.TestNumericField);
-                        SetTextField(contentItem, nameof(TestPart), FieldNames.TestTextField);
+                    var contentItem = _contentManager.New(viewModel.Type);
+                    _contentManager.Create(contentItem);
+                    switch (viewModel.Type)
+                    {
+                        case "Test":
+                            SetTitlePart(contentItem);
+                            SetLayoutPart(contentItem);
+                            SetBooleanField(contentItem, nameof(TestPart), FieldNames.TestBooleanField);
+                            SetContentPickerField(contentItem, nameof(TestPart), FieldNames.TestContentPickerField);
+                            SetDateTimeField(contentItem, nameof(TestPart), FieldNames.TestDateTimeField);
+                            SetEnumerationField(contentItem, nameof(TestPart), FieldNames.TestEnumerationField);
+                            SetInputField(contentItem, nameof(TestPart), FieldNames.TestInputField);
+                            SetLinkField(contentItem, nameof(TestPart), FieldNames.TestLinkField);
+                            SetMediaLibraryPickerField(contentItem, nameof(TestPart), FieldNames.TestMediaLibraryPickerField);
+                            SetNumericField(contentItem, nameof(TestPart), FieldNames.TestNumericField);
+                            SetTextField(contentItem, nameof(TestPart), FieldNames.TestTextField);
 
-                        break;
-                    case "Page":
-                        SetTitlePart(contentItem);
-                        SetLayoutPart(contentItem);
-                        SetTagsPart(contentItem);
+                            break;
+                        case "Page":
+                            SetTitlePart(contentItem);
+                            SetLayoutPart(contentItem);
+                            SetTagsPart(contentItem);
 
-                        break;
-                    default:
-                        return Content(HttpStatusCode.BadRequest, T("Unsupported content type.").Text);
+                            break;
+                        default:
+                            return Content(HttpStatusCode.BadRequest, T("Unsupported content type.").Text);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex.IsFatal()) throw;
+
+                    return Content(HttpStatusCode.InternalServerError, ex.Message);
                 }
             }
 
