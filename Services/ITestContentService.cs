@@ -2,6 +2,7 @@
 using Orchard.ContentManagement;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -11,5 +12,6 @@ namespace Lombiq.OrchardContentStressTest.Services
     {
         IContent GetTestBlog();
         IContent GetTestBlogPost();
+        FileInfo[] GetTestImages();
     }
 }

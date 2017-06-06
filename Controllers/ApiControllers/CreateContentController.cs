@@ -24,6 +24,8 @@ using Orchard.Fields.Settings;
 using Orchard.Core.Common.Models;
 using Lombiq.OrchardContentStressTest.Services;
 using Orchard.Comments.Models;
+using System.IO;
+using Orchard.MediaLibrary.Services;
 
 namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 {
@@ -35,6 +37,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
         private readonly IElementManager _elementManager;
         private readonly Faker _faker;
         private readonly ITestContentService _testContentService;
+        private readonly IMediaLibraryService _mediaLibraryService;
 
         public Localizer T { get; set; }
 
@@ -44,7 +47,8 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             IContentManager contentManager,
             ILayoutSerializer layoutSerializer,
             IElementManager elementManager,
-            ITestContentService testContentService)
+            ITestContentService testContentService,
+            IMediaLibraryService mediaLibraryService)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;
@@ -52,6 +56,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             _elementManager = elementManager;
             _faker = new Faker();
             _testContentService = testContentService;
+            _mediaLibraryService = mediaLibraryService;
         }
 
 
@@ -112,6 +117,15 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                             commentPart.Email = _faker.Internet.Email();
                             commentPart.Status = CommentStatus.Approved;
                             commentPart.CommentedOn = _testContentService.GetTestBlogPost().Id;
+
+                            break;
+                        case "Image":
+                            var testImages = _testContentService.GetTestImages();
+                            var file = testImages.ElementAt(_faker.Random.Number(0, testImages.Count() - 1));
+                            using (var stream = new FileInfo(file.FullName).OpenRead())
+                            {
+                                _contentManager.Create(_mediaLibraryService.ImportMedia(stream, Config.TestImagesFolderName, file.Name));
+                            }
 
                             break;
                         default:

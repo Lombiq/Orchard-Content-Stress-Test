@@ -20,19 +20,16 @@ namespace Lombiq.OrchardContentStressTest.Migrations
     {
         private readonly IMediaLibraryService _mediaLibraryService;
         private readonly IContentManager _contentManager;
-        private readonly HttpContextBase _httpContextBase;
         private readonly ITestContentService _testContentService;
 
 
         public TestMigrations(
             IMediaLibraryService mediaLibraryService,
             IContentManager contentManager,
-            HttpContextBase httpContextBase,
             ITestContentService testContentService)
         {
             _mediaLibraryService = mediaLibraryService;
             _contentManager = contentManager;
-            _httpContextBase = httpContextBase;
             _testContentService = testContentService;
         }
 
@@ -88,12 +85,11 @@ namespace Lombiq.OrchardContentStressTest.Migrations
                 );
 
             // Importing test images.
-            var testImagesDirectoryPath = _httpContextBase.Server.MapPath(Path.Combine("~/Modules", "Lombiq.OrchardContentStressTest", "Content", "Images"));
-            foreach (var file in new DirectoryInfo(testImagesDirectoryPath).GetFiles())
+            foreach (var file in _testContentService.GetTestImages())
             {
-                using (FileStream stream = new FileInfo(file.FullName).OpenRead())
+                using (var stream = new FileInfo(file.FullName).OpenRead())
                 {
-                    _contentManager.Create(_mediaLibraryService.ImportMedia(stream, "Test Images", file.Name));
+                    _contentManager.Create(_mediaLibraryService.ImportMedia(stream, Config.TestImagesFolderName, file.Name));
                 }
             }
 
