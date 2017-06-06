@@ -28,6 +28,7 @@ using System.IO;
 using Orchard.MediaLibrary.Services;
 using Orchard.Users.Models;
 using Orchard.Services;
+using Orchard.Taxonomies.Services;
 
 namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 {
@@ -41,6 +42,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
         private readonly ITestContentService _testContentService;
         private readonly IMediaLibraryService _mediaLibraryService;
         private readonly IMembershipService _membershipService;
+        private readonly ITaxonomyService _taxonomyService;
 
         public Localizer T { get; set; }
 
@@ -52,7 +54,8 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             IElementManager elementManager,
             ITestContentService testContentService,
             IMediaLibraryService mediaLibraryService,
-            IMembershipService membershipService)
+            IMembershipService membershipService,
+            ITaxonomyService taxonomyService)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;
@@ -62,6 +65,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             _testContentService = testContentService;
             _mediaLibraryService = mediaLibraryService;
             _membershipService = membershipService;
+            _taxonomyService = taxonomyService;
         }
 
 
@@ -141,6 +145,12 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                                                   null,
                                                   null,
                                                   true));
+
+                            break;
+                        case "TaxonomyTerm":
+                            var term = _taxonomyService.NewTerm(_testContentService.GetTestTaxonomy());
+                            SetTitlePart(term.ContentItem);
+                            _contentManager.Create(term);
 
                             break;
                         default:

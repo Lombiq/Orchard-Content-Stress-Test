@@ -135,6 +135,10 @@
       <Project>{5D0F00F0-26C9-4785-AD61-B85710C60EB0}</Project>
       <Name>Orchard.Tags</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orchard.Taxonomies\Orchard.Taxonomies.csproj">
+      <Project>{E649EA64-D213-461B-87F7-D67035801443}</Project>
+      <Name>Orchard.Taxonomies</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orchard.Users\Orchard.Users.csproj">
       <Project>{79AED36E-ABD0-4747-93D3-8722B042454B}</Project>
       <Name>Orchard.Users</Name>

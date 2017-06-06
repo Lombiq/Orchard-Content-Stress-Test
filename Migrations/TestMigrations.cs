@@ -104,6 +104,11 @@ namespace Lombiq.OrchardContentStressTest.Migrations
             blogPost.As<TitlePart>().Title = Config.TestBlogPostTitle;
             blogPost.As<CommonPart>().Container = _testContentService.GetTestBlog();
 
+            // Creating a test Taxonomy for TaxonomyTerms.
+            var taxonomy = _contentManager.New("Taxonomy");
+            _contentManager.Create(taxonomy);
+            taxonomy.As<TitlePart>().Title = Config.TestTaxonomyTitle;
+
             return 1;
         }
     }
