@@ -2,13 +2,17 @@
 using Lombiq.OrchardContentStressTest.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.MetaData;
+using Orchard.Core.Common.Models;
 using Orchard.Core.Contents.Extensions;
+using Orchard.Core.Title.Models;
 using Orchard.Data.Migration;
 using Orchard.MediaLibrary.Services;
 using System;
 using System.IO;
 using System.Text;
 using System.Web;
+using System.Linq;
+using Lombiq.OrchardContentStressTest.Services;
 
 namespace Lombiq.OrchardContentStressTest.Migrations
 {
@@ -17,13 +21,19 @@ namespace Lombiq.OrchardContentStressTest.Migrations
         private readonly IMediaLibraryService _mediaLibraryService;
         private readonly IContentManager _contentManager;
         private readonly HttpContextBase _httpContextBase;
+        private readonly ITestContentService _testContentService;
 
 
-        public TestMigrations(IMediaLibraryService mediaLibraryService, IContentManager contentManager, HttpContextBase httpContextBase)
+        public TestMigrations(
+            IMediaLibraryService mediaLibraryService,
+            IContentManager contentManager,
+            HttpContextBase httpContextBase,
+            ITestContentService testContentService)
         {
             _mediaLibraryService = mediaLibraryService;
             _contentManager = contentManager;
             _httpContextBase = httpContextBase;
+            _testContentService = testContentService;
         }
 
 
@@ -77,6 +87,7 @@ namespace Lombiq.OrchardContentStressTest.Migrations
                     .Listable()
                 );
 
+            // Importing test images.
             var testImagesDirectoryPath = _httpContextBase.Server.MapPath(Path.Combine("~/Modules", "Lombiq.OrchardContentStressTest", "Content", "Images"));
             foreach (var file in new DirectoryInfo(testImagesDirectoryPath).GetFiles())
             {
@@ -85,6 +96,17 @@ namespace Lombiq.OrchardContentStressTest.Migrations
                     _contentManager.Create(_mediaLibraryService.ImportMedia(stream, "Test Images", file.Name));
                 }
             }
+
+            // Creating a test Blog for BlogPosts.
+            var blog = _contentManager.New("Blog");
+            _contentManager.Create(blog);
+            blog.As<TitlePart>().Title = Config.TestBlogTitle;
+
+            // Creating a test BlogPost for Comments.
+            var blogPost = _contentManager.New("BlogPost");
+            _contentManager.Create(blogPost);
+            blogPost.As<TitlePart>().Title = Config.TestBlogPostTitle;
+            blogPost.As<CommonPart>().Container = _testContentService.GetTestBlog();
 
             return 1;
         }

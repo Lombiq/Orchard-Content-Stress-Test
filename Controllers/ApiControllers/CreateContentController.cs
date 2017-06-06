@@ -21,6 +21,9 @@ using System.Linq;
 using System;
 using Orchard.Exceptions;
 using Orchard.Fields.Settings;
+using Orchard.Core.Common.Models;
+using Lombiq.OrchardContentStressTest.Services;
+using Orchard.Comments.Models;
 
 namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 {
@@ -31,18 +34,24 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
         private readonly ILayoutSerializer _layoutSerializer;
         private readonly IElementManager _elementManager;
         private readonly Faker _faker;
+        private readonly ITestContentService _testContentService;
 
         public Localizer T { get; set; }
 
 
-        public CreateContentController(IAuthorizer authorizer, IContentManager contentManager, ILayoutSerializer layoutSerializer, IElementManager elementManager)
+        public CreateContentController(
+            IAuthorizer authorizer,
+            IContentManager contentManager,
+            ILayoutSerializer layoutSerializer,
+            IElementManager elementManager,
+            ITestContentService testContentService)
         {
-
             _authorizer = authorizer;
             _contentManager = contentManager;
             _layoutSerializer = layoutSerializer;
             _elementManager = elementManager;
             _faker = new Faker();
+            _testContentService = testContentService;
         }
 
 
@@ -67,7 +76,6 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                 try
                 {
                     var contentItem = _contentManager.New(viewModel.Type);
-                    _contentManager.Create(contentItem);
                     switch (viewModel.Type)
                     {
                         case "Test":
@@ -90,9 +98,27 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                             SetTagsPart(contentItem);
 
                             break;
+                        case "BlogPost":
+                            SetTitlePart(contentItem);
+                            SetBodyPart(contentItem);
+                            SetTagsPart(contentItem);
+                            SetContainer(contentItem, _testContentService.GetTestBlog());
+
+                            break;
+                        case "Comment":
+                            var commentPart = contentItem.As<CommentPart>();
+                            commentPart.CommentText = _faker.Lorem.Sentence();
+                            commentPart.Author = _faker.Internet.UserName();
+                            commentPart.Email = _faker.Internet.Email();
+                            commentPart.Status = CommentStatus.Approved;
+                            commentPart.CommentedOn = _testContentService.GetTestBlogPost().Id;
+
+                            break;
                         default:
                             return Content(HttpStatusCode.BadRequest, T("Unsupported content type.").Text);
                     }
+
+                    _contentManager.Create(contentItem);
                 }
                 catch (Exception ex)
                 {
@@ -111,6 +137,11 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             contentItem.As<TitlePart>().Title = _faker.Lorem.Sentence();
         }
 
+        private void SetBodyPart(Orchard.ContentManagement.ContentItem contentItem)
+        {
+            contentItem.As<BodyPart>().Text = _faker.Lorem.Paragraphs();
+        }
+
         private void SetLayoutPart(Orchard.ContentManagement.ContentItem contentItem)
         {
             var canvas = _elementManager.ActivateElement<Canvas>();
@@ -123,6 +154,11 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
         private void SetTagsPart(Orchard.ContentManagement.ContentItem contentItem)
         {
             contentItem.As<TagsPart>().CurrentTags = _faker.Commerce.Categories(10);
+        }
+
+        private void SetContainer(Orchard.ContentManagement.ContentItem contentItem, IContent container)
+        {
+            contentItem.As<CommonPart>().Container = container;
         }
 
         private void SetBooleanField(Orchard.ContentManagement.ContentItem contentItem, string partName, string fieldName)

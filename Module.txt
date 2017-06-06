@@ -9,4 +9,4 @@ Features:
     Lombiq.OrchardContentStressTest:
         Description: Tools for creating multiple test content items.
         Category: Developer
-		Dependencies: Orchard.ContentPicker, Orchard.Fields, Orchard.Layouts, Orchard.MediaLibrary, Orchard.Tags, Piedone.HelpfulLibraries.Contents
+        Dependencies: Orchard.Blogs, Orchard.Comments, Orchard.ContentPicker, Orchard.Fields, Orchard.Layouts, Orchard.MediaLibrary, Orchard.Tags, Piedone.HelpfulLibraries.Contents

@@ -59,6 +59,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routes.cs" />
     <Compile Include="Services\AssemblyRedirectSetupShellEventHandler.cs" />
+    <Compile Include="Services\ITestContentService.cs" />
+    <Compile Include="Services\TestContentService.cs" />
     <Compile Include="ViewModels\CreateContentRequestViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +106,14 @@
     <ProjectReference Include="..\..\Core\Orchard.Core.csproj">
       <Project>{9916839c-39fc-4ceb-a5af-89ca7e87119f}</Project>
       <Name>Orchard.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Blogs\Orchard.Blogs.csproj">
+      <Project>{63FBD4D9-E1DA-4A7B-AA6A-D6074FE50867}</Project>
+      <Name>Orchard.Blogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Comments\Orchard.Comments.csproj">
+      <Project>{14C049FD-B35B-415A-A824-87F26B26E7FD}</Project>
+      <Name>Orchard.Comments</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orchard.ContentPicker\Orchard.ContentPicker.csproj">
       <Project>{F301EF7D-F19C-4D83-AA94-CB64F29C037D}</Project>
