@@ -89,43 +89,59 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             {
                 try
                 {
-                    var contentItem = _contentManager.New(viewModel.Type);
                     switch (viewModel.Type)
                     {
                         case "Test":
-                            SetTitlePart(contentItem);
-                            SetLayoutPart(contentItem);
-                            SetBooleanField(contentItem, nameof(TestPart), FieldNames.TestBooleanField);
-                            SetContentPickerField(contentItem, nameof(TestPart), FieldNames.TestContentPickerField);
-                            SetDateTimeField(contentItem, nameof(TestPart), FieldNames.TestDateTimeField);
-                            SetEnumerationField(contentItem, nameof(TestPart), FieldNames.TestEnumerationField);
-                            SetInputField(contentItem, nameof(TestPart), FieldNames.TestInputField);
-                            SetLinkField(contentItem, nameof(TestPart), FieldNames.TestLinkField);
-                            SetMediaLibraryPickerField(contentItem, nameof(TestPart), FieldNames.TestMediaLibraryPickerField);
-                            SetNumericField(contentItem, nameof(TestPart), FieldNames.TestNumericField);
-                            SetTextField(contentItem, nameof(TestPart), FieldNames.TestTextField);
+                            var test = _contentManager.New(viewModel.Type);
+
+                            SetTitlePart(test);
+                            SetLayoutPart(test);
+
+                            _contentManager.Create(test);
+
+                            SetBooleanField(test, nameof(TestPart), FieldNames.TestBooleanField);
+                            SetContentPickerField(test, nameof(TestPart), FieldNames.TestContentPickerField);
+                            SetDateTimeField(test, nameof(TestPart), FieldNames.TestDateTimeField);
+                            SetEnumerationField(test, nameof(TestPart), FieldNames.TestEnumerationField);
+                            SetInputField(test, nameof(TestPart), FieldNames.TestInputField);
+                            SetLinkField(test, nameof(TestPart), FieldNames.TestLinkField);
+                            SetMediaLibraryPickerField(test, nameof(TestPart), FieldNames.TestMediaLibraryPickerField);
+                            SetNumericField(test, nameof(TestPart), FieldNames.TestNumericField);
+                            SetTextField(test, nameof(TestPart), FieldNames.TestTextField);
 
                             break;
                         case "Page":
-                            SetTitlePart(contentItem);
-                            SetLayoutPart(contentItem);
-                            SetTagsPart(contentItem);
+                            var page = _contentManager.New(viewModel.Type);
+
+                            SetTitlePart(page);
+                            SetLayoutPart(page);
+                            SetTagsPart(page);
+
+                            _contentManager.Create(page);
 
                             break;
                         case "BlogPost":
-                            SetTitlePart(contentItem);
-                            SetBodyPart(contentItem);
-                            SetTagsPart(contentItem);
-                            SetContainer(contentItem, _testContentService.GetTestBlog());
+                            var blogPost = _contentManager.New(viewModel.Type);
+
+                            SetTitlePart(blogPost);
+                            SetBodyPart(blogPost);
+                            SetTagsPart(blogPost);
+                            SetContainer(blogPost, _testContentService.GetTestBlog());
+
+                            _contentManager.Create(blogPost);
 
                             break;
                         case "Comment":
-                            var commentPart = contentItem.As<CommentPart>();
+                            var comment = _contentManager.New(viewModel.Type);
+
+                            var commentPart = comment.As<CommentPart>();
                             commentPart.CommentText = _faker.Lorem.Sentence();
                             commentPart.Author = _faker.Internet.UserName();
                             commentPart.Email = _faker.Internet.Email();
                             commentPart.Status = CommentStatus.Approved;
                             commentPart.CommentedOn = _testContentService.GetTestBlogPost().Id;
+
+                            _contentManager.Create(comment);
 
                             break;
                         case "Image":
@@ -150,14 +166,13 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                         case "TaxonomyTerm":
                             var term = _taxonomyService.NewTerm(_testContentService.GetTestTaxonomy());
                             SetTitlePart(term.ContentItem);
+
                             _contentManager.Create(term);
 
                             break;
                         default:
                             return Content(HttpStatusCode.BadRequest, T("Unsupported content type.").Text);
                     }
-
-                    _contentManager.Create(contentItem);
                 }
                 catch (Exception ex)
                 {
