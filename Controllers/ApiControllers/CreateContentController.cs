@@ -92,7 +92,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                     switch (viewModel.Type)
                     {
                         case "Test":
-                            var test = _contentManager.New(viewModel.Type);
+                            var test = _contentManager.New(ContentTypes.Test);
 
                             SetTitlePart(test);
                             SetLayoutPart(test);
@@ -111,7 +111,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 
                             break;
                         case "Page":
-                            var page = _contentManager.New(viewModel.Type);
+                            var page = _contentManager.New("Page");
 
                             SetTitlePart(page);
                             SetLayoutPart(page);
@@ -120,8 +120,8 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                             _contentManager.Create(page);
 
                             break;
-                        case "BlogPost":
-                            var blogPost = _contentManager.New(viewModel.Type);
+                        case "Blog Post":
+                            var blogPost = _contentManager.New("BlogPost");
 
                             SetTitlePart(blogPost);
                             SetBodyPart(blogPost);
@@ -132,7 +132,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 
                             break;
                         case "Comment":
-                            var comment = _contentManager.New(viewModel.Type);
+                            var comment = _contentManager.New("Comment");
 
                             var commentPart = comment.As<CommentPart>();
                             commentPart.CommentText = _faker.Lorem.Sentence();
@@ -163,7 +163,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                                                   true));
 
                             break;
-                        case "TaxonomyTerm":
+                        case "Taxonomy Term":
                             var term = _taxonomyService.NewTerm(_testContentService.GetTestTaxonomy());
                             SetTitlePart(term.ContentItem);
 
