@@ -71,7 +71,12 @@ namespace Lombiq.OrchardContentStressTest.Migrations
                     .WithPart("TitlePart")
                     .WithPart("LayoutPart")
                     .WithPart("CommonPart", builder => builder
-                        .WithSetting("DateEditorSettings.ShowDateEditor", "True")).WithPart("LocalizationPart")
+                        .WithSetting("DateEditorSettings.ShowDateEditor", "True"))
+                    .WithPart("AutoroutePart", builder => builder
+                        .WithSetting("AutorouteSettings.AllowCustomPattern", "True")
+                        .WithSetting("AutorouteSettings.AutomaticAdjustmentOnEdit", "False")
+                        .WithSetting("AutorouteSettings.PatternDefinitions", "[{\"Name\":\"Title\",\"Pattern\":\"{Content.Slug}\",\"Description\":\"my-test\"}]"))
+                    .WithPart("LocalizationPart")
                     .WithPart("PublishLaterPart")
                     .Creatable()
                     .Draftable()
