@@ -94,19 +94,19 @@ namespace Lombiq.OrchardContentStressTest.Migrations
 
             // Creating a test Blog for BlogPosts.
             var blog = _contentManager.New("Blog");
-            _contentManager.Create(blog);
             blog.As<TitlePart>().Title = Config.TestBlogTitle;
+            _contentManager.Create(blog);
 
             // Creating a test BlogPost for Comments.
             var blogPost = _contentManager.New("BlogPost");
-            _contentManager.Create(blogPost);
             blogPost.As<TitlePart>().Title = Config.TestBlogPostTitle;
             blogPost.As<CommonPart>().Container = _testContentService.GetTestBlog();
+            _contentManager.Create(blogPost);
 
             // Creating a test Taxonomy for TaxonomyTerms.
             var taxonomy = _contentManager.New("Taxonomy");
-            _contentManager.Create(taxonomy);
             taxonomy.As<TitlePart>().Title = Config.TestTaxonomyTitle;
+            _contentManager.Create(taxonomy);
 
             return 1;
         }
