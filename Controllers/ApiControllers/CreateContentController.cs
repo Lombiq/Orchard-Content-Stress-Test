@@ -29,6 +29,8 @@ using Orchard.MediaLibrary.Services;
 using Orchard.Users.Models;
 using Orchard.Services;
 using Orchard.Taxonomies.Services;
+using Orchard.Tags.Services;
+using System.Collections.Generic;
 
 namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 {
@@ -43,6 +45,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
         private readonly IMediaLibraryService _mediaLibraryService;
         private readonly IMembershipService _membershipService;
         private readonly ITaxonomyService _taxonomyService;
+        private readonly ITagService _tagService;
 
         public Localizer T { get; set; }
 
@@ -55,7 +58,8 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             ITestContentService testContentService,
             IMediaLibraryService mediaLibraryService,
             IMembershipService membershipService,
-            ITaxonomyService taxonomyService)
+            ITaxonomyService taxonomyService,
+            ITagService tagService)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;
@@ -66,6 +70,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             _mediaLibraryService = mediaLibraryService;
             _membershipService = membershipService;
             _taxonomyService = taxonomyService;
+            _tagService = tagService;
         }
 
 
@@ -157,7 +162,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                             _membershipService.CreateUser(new CreateUserParams(
                                                   _faker.Internet.UserName(),
                                                   "password",
-                                                  _faker.Internet.Password(),
+                                                  _faker.Internet.Email(),
                                                   null,
                                                   null,
                                                   true));
@@ -207,7 +212,8 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 
         private void SetTagsPart(Orchard.ContentManagement.ContentItem contentItem)
         {
-            contentItem.As<TagsPart>().CurrentTags = _faker.Commerce.Categories(10);
+            contentItem.As<TagsPart>().CurrentTags =
+                _faker.Commerce.Categories(10).Select(category => _tagService.CreateTag(category).TagName);
         }
 
         private void SetContainer(Orchard.ContentManagement.ContentItem contentItem, IContent container)
