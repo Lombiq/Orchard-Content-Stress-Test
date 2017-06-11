@@ -7,7 +7,7 @@ namespace Lombiq.OrchardContentStressTest.Constants
 {
     public class Config
     {
-        public const int BatchCount = 50;
+        public const int BatchCount = 10;
         public const int TestEnumerationFieldOptionsNumber = 10;
         public static string[] SupportedTypes = new string[] { "Test", "Page", "Blog Post", "Comment", "Image", "User", "Taxonomy Term" };
         public const string TestBlogTitle = "Lombiq.OrchardContentStressTest.TestBlog";
