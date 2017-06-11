@@ -9,7 +9,7 @@ Orchard module which gives tools for creating multiple test content items.
 
 ## Documentation
 
-
+At /Lombiq.OrchardContentStressTest/Admin/Index select a content type, set the count then click on create.
 
 
 ## Contribution notes
