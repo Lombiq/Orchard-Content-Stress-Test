@@ -1,5 +1,6 @@
 ﻿using Lombiq.OrchardContentStressTest.Constants;
 using Lombiq.OrchardContentStressTest.Models;
+using Lombiq.OrchardContentStressTest.Services;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.MetaData;
 using Orchard.Core.Common.Models;
@@ -9,10 +10,7 @@ using Orchard.Data.Migration;
 using Orchard.MediaLibrary.Services;
 using System;
 using System.IO;
-using System.Text;
-using System.Web;
 using System.Linq;
-using Lombiq.OrchardContentStressTest.Services;
 
 namespace Lombiq.OrchardContentStressTest.Migrations
 {

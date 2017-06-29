@@ -1,36 +1,33 @@
 ﻿using Bogus;
 using Lombiq.OrchardContentStressTest.Constants;
 using Lombiq.OrchardContentStressTest.Models;
+using Lombiq.OrchardContentStressTest.Services;
 using Lombiq.OrchardContentStressTest.ViewModels;
+using Orchard.Comments.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentPicker.Fields;
 using Orchard.Core.Common.Fields;
+using Orchard.Core.Common.Models;
 using Orchard.Core.Title.Models;
+using Orchard.Exceptions;
 using Orchard.Fields.Fields;
-using LayoutElements = Orchard.Layouts.Elements;
+using Orchard.Fields.Settings;
 using Orchard.Layouts.Models;
 using Orchard.Layouts.Services;
 using Orchard.Localization;
 using Orchard.MediaLibrary.Fields;
+using Orchard.MediaLibrary.Services;
 using Orchard.Security;
 using Orchard.Tags.Models;
+using Orchard.Tags.Services;
+using Orchard.Taxonomies.Services;
 using Piedone.HelpfulLibraries.Contents;
+using System;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
-using System.Linq;
-using System;
-using Orchard.Exceptions;
-using Orchard.Fields.Settings;
-using Orchard.Core.Common.Models;
-using Lombiq.OrchardContentStressTest.Services;
-using Orchard.Comments.Models;
-using System.IO;
-using Orchard.MediaLibrary.Services;
-using Orchard.Users.Models;
-using Orchard.Services;
-using Orchard.Taxonomies.Services;
-using Orchard.Tags.Services;
-using System.Collections.Generic;
+using LayoutElements = Orchard.Layouts.Elements;
 
 namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 {
