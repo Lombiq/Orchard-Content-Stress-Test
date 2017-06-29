@@ -36,12 +36,6 @@ namespace Lombiq.OrchardContentStressTest.Migrations
 
         public int Create()
         {
-            var enumerationFieldOptions = new StringBuilder();
-            for (int i = 0; i < Config.TestEnumerationFieldOptionsNumber; i++)
-            {
-                enumerationFieldOptions.Append("Option" + i + (i == Config.TestEnumerationFieldOptionsNumber - 1 ? "" : Environment.NewLine));
-            }
-
             ContentDefinitionManager.AlterPartDefinition(nameof(TestPart),
                 part => part
                     .WithField(FieldNames.TestBooleanField, field => field
@@ -52,7 +46,13 @@ namespace Lombiq.OrchardContentStressTest.Migrations
                         .OfType("DateTimeField"))
                     .WithField(FieldNames.TestEnumerationField, field => field
                         .OfType("EnumerationField")
-                        .WithSetting("EnumerationFieldSettings.Options", enumerationFieldOptions.ToString()))
+                        .WithSetting(
+                            "EnumerationFieldSettings.Options",
+                            string.Join(
+                                Environment.NewLine,
+                                Enumerable
+                                    .Range(0, Config.TestEnumerationFieldOptionsNumber)
+                                    .Select(number => "Option" + number))))
                     .WithField(FieldNames.TestInputField, field => field
                         .OfType("InputField"))
                     .WithField(FieldNames.TestLinkField, field => field
