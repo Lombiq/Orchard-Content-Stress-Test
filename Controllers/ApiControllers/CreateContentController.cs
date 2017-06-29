@@ -40,12 +40,13 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
         private readonly IContentManager _contentManager;
         private readonly ILayoutSerializer _layoutSerializer;
         private readonly IElementManager _elementManager;
-        private readonly Faker _faker;
         private readonly ITestContentService _testContentService;
         private readonly IMediaLibraryService _mediaLibraryService;
         private readonly IMembershipService _membershipService;
         private readonly ITaxonomyService _taxonomyService;
         private readonly ITagService _tagService;
+
+        private Faker _faker;
 
         public Localizer T { get; set; }
 
@@ -59,18 +60,20 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             IMediaLibraryService mediaLibraryService,
             IMembershipService membershipService,
             ITaxonomyService taxonomyService,
-            ITagService tagService)
+            ITagService tagService,
+            IFakerService fakerService)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;
             _layoutSerializer = layoutSerializer;
             _elementManager = elementManager;
-            _faker = new Faker();
             _testContentService = testContentService;
             _mediaLibraryService = mediaLibraryService;
             _membershipService = membershipService;
             _taxonomyService = taxonomyService;
             _tagService = tagService;
+
+            _faker = fakerService.CreateFaker();
         }
 
 

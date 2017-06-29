@@ -59,6 +59,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routes.cs" />
     <Compile Include="Services\AssemblyRedirectSetupShellEventHandler.cs" />
+    <Compile Include="Services\FakerService.cs" />
+    <Compile Include="Services\IFakerService.cs" />
     <Compile Include="Services\ITestContentService.cs" />
     <Compile Include="Services\TestContentService.cs" />
     <Compile Include="ViewModels\CreateContentRequestViewModel.cs" />
