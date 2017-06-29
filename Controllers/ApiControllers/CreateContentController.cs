@@ -165,12 +165,12 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                             break;
                         case "User":
                             _membershipService.CreateUser(new CreateUserParams(
-                                                  _faker.Internet.UserName(),
-                                                  "password",
-                                                  _faker.Internet.Email(),
-                                                  null,
-                                                  null,
-                                                  true));
+                                _faker.Internet.UserName(),
+                                "password",
+                                _faker.Internet.Email(),
+                                null,
+                                null,
+                                true));
 
                             break;
                         case "Taxonomy Term":
@@ -192,7 +192,7 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                 }
             }
 
-            return Content(HttpStatusCode.OK, T("The batch were successfully created.").Text);
+            return Content(HttpStatusCode.OK, T("The batch was successfully created.").Text);
         }
 
 
