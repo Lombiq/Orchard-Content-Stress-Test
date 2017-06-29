@@ -18,7 +18,10 @@ namespace Lombiq.OrchardContentStressTest.Services
         private readonly ITaxonomyService _taxonomyService;
 
 
-        public TestContentService(IContentManager contentManager, HttpContextBase httpContextBase, ITaxonomyService taxonomyService)
+        public TestContentService(
+            IContentManager contentManager,
+            HttpContextBase httpContextBase,
+            ITaxonomyService taxonomyService)
         {
             _contentManager = contentManager;
             _httpContextBase = httpContextBase;
@@ -28,17 +31,30 @@ namespace Lombiq.OrchardContentStressTest.Services
 
         public IContent GetTestBlog()
         {
-            return _contentManager.Query("Blog").Where<TitlePartRecord>(t => t.Title == Config.TestBlogTitle).List().FirstOrDefault();
+            return _contentManager
+                .Query("Blog")
+                .Where<TitlePartRecord>(titlePartRecord => titlePartRecord.Title == Config.TestBlogTitle)
+                .List()
+                .FirstOrDefault();
         }
 
         public IContent GetTestBlogPost()
         {
-            return _contentManager.Query("BlogPost").Where<TitlePartRecord>(t => t.Title == Config.TestBlogPostTitle).List().FirstOrDefault();
+            return _contentManager
+                .Query("BlogPost")
+                .Where<TitlePartRecord>(titlePartRecord => titlePartRecord.Title == Config.TestBlogPostTitle)
+                .List()
+                .FirstOrDefault();
         }
 
         public FileInfo[] GetTestImages()
         {
-            return new DirectoryInfo(_httpContextBase.Server.MapPath(Path.Combine("~/Modules", "Lombiq.OrchardContentStressTest", "Content", "Images"))).GetFiles();
+            return
+                new DirectoryInfo(
+                    _httpContextBase
+                        .Server
+                        .MapPath(Path.Combine("~/Modules", "Lombiq.OrchardContentStressTest", "Content", "Images")))
+                .GetFiles();
         }
 
         public TaxonomyPart GetTestTaxonomy()
