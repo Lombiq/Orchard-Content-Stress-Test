@@ -80,9 +80,11 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
             if (!_authorizer.Authorize(StandardPermissions.SiteOwner))
                 return Content(HttpStatusCode.Unauthorized, T("You're not allowed to create test content.").Text);
 
+            if (viewModel == null)
+                return Content(HttpStatusCode.BadRequest, T("Bad request.").Text);
+
             var remainingCount = viewModel.Count - viewModel.CurrentCount;
-            if (viewModel == null ||
-                !Config.SupportedTypes.Contains(viewModel.Type) ||
+            if (!Config.SupportedTypes.Contains(viewModel.Type) ||
                 viewModel.Count < 1 ||
                 viewModel.CurrentCount > viewModel.Count ||
                 remainingCount < 0)
