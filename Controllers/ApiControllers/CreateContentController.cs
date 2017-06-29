@@ -159,7 +159,8 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
                             var file = testImages.ElementAt(_faker.Random.Number(0, testImages.Count() - 1));
                             using (var stream = new FileInfo(file.FullName).OpenRead())
                             {
-                                _contentManager.Create(_mediaLibraryService.ImportMedia(stream, Config.TestImagesFolderName, file.Name));
+                                _contentManager.Create(
+                                    _mediaLibraryService.ImportMedia(stream, Config.TestImagesFolderName, file.Name));
                             }
 
                             break;
@@ -233,7 +234,8 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
 
         private void SetContentPickerField(ContentItem contentItem, string partName, string fieldName)
         {
-            contentItem.AsField<ContentPickerField>(partName, fieldName).Ids = new int[] { _faker.Random.Number(2, 100) };
+            contentItem.AsField<ContentPickerField>(partName, fieldName).Ids =
+                new int[] { _faker.Random.Number(2, 100) };
         }
 
         private void SetDateTimeField(ContentItem contentItem, string partName, string fieldName)
@@ -245,7 +247,13 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
         {
             var field = contentItem.AsField<EnumerationField>(partName, fieldName);
             var settings = field.PartFieldDefinition.Settings.GetModel<EnumerationFieldSettings>();
-            field.SelectedValues = new string[] { settings.Options.Split(new string[] { Environment.NewLine }, StringSplitOptions.None)[_faker.Random.Number(0, Config.TestEnumerationFieldOptionsNumber - 1)] };
+            field.SelectedValues = new string[]
+                {
+                    settings
+                        .Options
+                        .Split(new string[] { Environment.NewLine }, StringSplitOptions.None)
+                        [_faker.Random.Number(0, Config.TestEnumerationFieldOptionsNumber - 1)]
+                };
         }
 
         private void SetInputField(ContentItem contentItem, string partName, string fieldName)
@@ -261,7 +269,8 @@ namespace Lombiq.OrchardContentStressTest.Controllers.ApiControllers
         private void SetMediaLibraryPickerField(ContentItem contentItem, string partName, string fieldName)
         {
             var images = _contentManager.Query("Image").Slice(0, 100);
-            contentItem.AsField<MediaLibraryPickerField>(partName, fieldName).Ids = new int[] { images.ElementAt(_faker.Random.Number(images.Count() - 1)).Id };
+            contentItem.AsField<MediaLibraryPickerField>(partName, fieldName).Ids =
+                new int[] { images.ElementAt(_faker.Random.Number(images.Count() - 1)).Id };
         }
 
         private void SetNumericField(ContentItem contentItem, string partName, string fieldName)
