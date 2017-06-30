@@ -1,0 +1,12 @@
+﻿Name: Lombiq Orchard Content Stress Test
+AntiForgery: enabled
+Author: Lombiq
+Website: https://github.com/Lombiq/Orchard-Content-Stress-Test
+Version: 1.0
+OrchardVersion: 1.10.1
+Description: Tools for creating multiple test content items
+Features:
+    Lombiq.OrchardContentStressTest:
+        Description: Tools for creating multiple test content items.
+        Category: Developer
+        Dependencies: Orchard.Blogs, Orchard.Comments, Orchard.ContentPicker, Orchard.Fields, Orchard.Layouts, Orchard.MediaLibrary, Orchard.Users, Orchard.Tags, Orchard.Taxonomies, Piedone.HelpfulLibraries.Contents
