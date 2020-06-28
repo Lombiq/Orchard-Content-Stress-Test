@@ -2,7 +2,7 @@
 
 
 
-## Project Description
+## About
 
 Orchard module which gives tools for creating multiple test content items.
 
@@ -12,14 +12,8 @@ Orchard module which gives tools for creating multiple test content items.
 At /Lombiq.OrchardContentStressTest/Admin/Index select a content type, set the count then click on create.
 
 
-## Contribution notes
+## Contributing and support
 
-The module's source is available in two public source repositories, automatically mirrored in both directions with [Git-hg Mirror](https://githgmirror.com):
+Bug reports, feature requests, comments, questions, code contributions, and love letters are warmly welcome, please do so via GitHub issues and pull requests. Please adhere to our [open-source guidelines](https://lombiq.com/open-source-guidelines) while doing so.
 
-- [https://bitbucket.org/Lombiq/orchard-content-stress-test](https://bitbucket.org/Lombiq/orchard-content-stress-test) (Mercurial repository)
-- [https://github.com/Lombiq/Orchard-Content-Stress-Test](https://github.com/Lombiq/Orchard-Content-Stress-Test) (Git repository)
-
-Bug reports, feature requests and comments are warmly welcome, **please do so via GitHub**.
-Feel free to send pull requests too, no matter which source repository you choose for this purpose.
-
-This project is developed by [Lombiq Technologies Ltd](http://lombiq.com/). Commercial-grade support is available through Lombiq.
+This project is developed by [Lombiq Technologies](https://lombiq.com/). Commercial-grade support is available through Lombiq.
