@@ -1,16 +1,12 @@
 # Orchard Stress Test
 
-
-
 ## About
 
-Orchard module which gives tools for creating multiple test content items.
-
+Orchard module for creating test content items in bulk.
 
 ## Documentation
 
-At /Lombiq.OrchardContentStressTest/Admin/Index select a content type, set the count then click on create.
-
+If you have the Site Owner permission, go to Content > Content Stress Test in the admin menu to access this feature.
 
 ## Contributing and support
 
